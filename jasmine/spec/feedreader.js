@@ -88,7 +88,7 @@ $(function() {
             });
         });
        it('there is at least a single entry element within the feed container', function () {
-             expect($('.feed .entry')).toBeDefined();
+             expect($('.feed .entry')).toBeGreaterThan('0');
          });
      });
 
@@ -99,16 +99,20 @@ $(function() {
          * Remember, loadFeed() is asynchronous.
          */
         let lastContent; //declare a new empty variable
+        let newContent; //declare a new empty variable
         beforeEach(function(done) {
-          lastContent = $('.feed').html();
-          loadFeed(1, function() {
-             done();
+          loadFeed(0, function() {  // feed 0 done loading
+            lastContent = $('.feed').html();
+            loadFeed(1, function() {  // feed 1 done loading
+              newContent = $('.feed').html();
+             // all variables initialized, can begin tests
+              done();
+            });
            });
-        });
+         });
 
         it('content actually changes when new feed is loaded', function(done) {
-           let changedContent = $('.feed').html();
-           expect(lastContent).not.toBe(changedContent);
+           expect(lastContent).not.toBe(newContent);
            done();
         });
      });
